@@ -16,10 +16,12 @@ These coverings each use one block fewer than the best known before them:
 | C(76,14,2) | 38 | 39 |
 | C(94,17,2) | 39 | 40 |
 | C(42,12,3) | 76 | 77 |
+| C(47,21,3) | 21 | 22 |
+| C(49,13,3) | 81 | 82 |
 
 "Previous best" is the value in the La Jolla Covering Repository's final data (Daniel M. Gordon, CC BY 4.0,
 doi:10.5281/zenodo.19735294). It was still the listed value on coveringrepository.com, which tracks improvements made
-after that repository froze, when checked on 22 October 2026. All eight earlier values came from general constructions
+after that repository froze, when checked on 22 October 2026. All ten earlier values came from general constructions
 rather than a direct search. The coverings were submitted to coveringrepository.com on 22 October 2026.
 
 ## Check them yourself
@@ -37,7 +39,7 @@ two other independent checkers before release.
 A compiled local search in the style of Nurmela and Östergård (1993). With the number of blocks fixed, it minimises the
 number of uncovered t-subsets by swapping one point of a block at a time. It alternates simulated annealing with
 breakout weighting, the clause-weighting idea from SAT local search. It ran on a laptop at no cost, starting from
-random blocks.
+random blocks. The engine is open source: https://github.com/arhancanli/quantavane
 
 ## Files
 

@@ -56,6 +56,9 @@ def main(argv=None):
     nat.add_argument("--workers", type=int, default=8); nat.add_argument("--seconds", type=float, default=60)
     nat.add_argument("--hours", type=float, default=24 * 365); nat.add_argument("--max-subsets", type=int, default=400_000)
     sub.add_parser("progress", help="verified progress per day from the native loop and the claim packets")
+    be = sub.add_parser("bench", help="Open Problems Benchmark v0 (internal): models write construction programs")
+    be.add_argument("--model"); be.add_argument("--baseline", action="store_true"); be.add_argument("--report", action="store_true")
+    be.add_argument("--per-tier", type=int, default=10); be.add_argument("--seconds", type=float, default=60)
     sub.add_parser("status", help="records, our best, models and claims")
     h = sub.add_parser("hidden", help="run hidden tests now and review the champion")
     b = sub.add_parser("best", help="export the best verified construction"); b.add_argument("problem")
@@ -66,6 +69,13 @@ def main(argv=None):
 
     if a.cmd == "status":
         return status()
+    if a.cmd == "bench":
+        from . import bench
+        if a.report:
+            return bench.report()
+        if a.baseline:
+            return bench.baseline(a.per_tier, a.seconds, log=say)
+        return bench.run(a.model or "gemma4-12b-32k", a.per_tier, a.seconds, log=say)
     if a.cmd == "progress":
         from . import native
         return native.progress()

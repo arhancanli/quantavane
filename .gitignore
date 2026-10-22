@@ -7,3 +7,4 @@ claims/
 results/
 engine/native/cover_anneal
 engine/native/lotto_anneal
+engine/native/flipgraph

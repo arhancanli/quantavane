@@ -62,5 +62,21 @@
   "blocks": 76,
   "previous": 77,
   "file": "C_42_12_3_76.txt"
+ },
+ {
+  "v": 47,
+  "k": 21,
+  "t": 3,
+  "blocks": 21,
+  "previous": 22,
+  "file": "C_47_21_3_21.txt"
+ },
+ {
+  "v": 49,
+  "k": 13,
+  "t": 3,
+  "blocks": 81,
+  "previous": 82,
+  "file": "C_49_13_3_81.txt"
  }
 ]

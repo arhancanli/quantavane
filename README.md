@@ -5,7 +5,7 @@ results count, and every attempt, kept or rejected, is recorded.
 
 ## Results so far
 
-Eight covering designs, each one block below the best value known before, found by this engine on a laptop at no
+Ten covering designs, each one block below the best value known before, found by this engine on a laptop at no
 cost and submitted to coveringrepository.com on 22 October 2026. The coverings and a standalone checker are in
 [quantavane-covering-records](https://github.com/arhancanli/quantavane-covering-records) and in
 `release/covering-records/`.
@@ -20,16 +20,19 @@ cost and submitted to coveringrepository.com on 22 October 2026. The coverings a
 | C(76,14,2) | 38 | 39 |
 | C(94,17,2) | 39 | 40 |
 | C(42,12,3) | 76 | 77 |
+| C(47,21,3) | 21 | 22 |
+| C(49,13,3) | 81 | 82 |
 
 ## Quick start
 
 ```sh
 uv venv --python 3.12 .venv && uv pip install --python .venv numpy scipy
 .venv/bin/python -m unittest tests/test_engine.py tests/test_lab.py tests/test_native.py
-.venv/bin/python scripts/reproduce_records.py --minutes 10   # find the eight records again from scratch
+.venv/bin/python scripts/reproduce_records.py --minutes 10   # find the records again from scratch
 ```
 
-Needs macOS or Linux, Python 3.12 and a C compiler (`clang`). The native searches compile themselves on first use.
+Needs Python 3.12 and a C compiler (`clang`); the native searches compile themselves on first use. The searches and
+checkers run on macOS or Linux; the lab's sandbox uses macOS `sandbox-exec`.
 
 ## What is inside
 
@@ -41,9 +44,17 @@ Needs macOS or Linux, Python 3.12 and a C compiler (`clang`). The native searche
 - **The always-on loop** (`python -m engine native`): works through open table entries, gives close misses more time,
   alternates search methods, and writes a claim packet for anything below the record.
 - **The lab** (`python -m engine lab`): AI models write candidate programs, which run in a macOS sandbox with no
-  network, no private file access and a CPU limit; an attempt archive, islands, a spending ledger with a hard cap, and
+  network, no private file access and CPU, memory and disk limits; an attempt archive, islands, a spending ledger with a hard cap, and
   training system v1 (model registry, router, hidden tests, champion and challenger).
 - **Triage scripts** (`scripts/`): try one block below the record on many entries at once.
+- **Matrix multiplication** (`engine/native/flipgraph.c`): the flip-graph search of Kauers and Moosbauer over GF(2),
+  which walks between multiplication schemes by exact rewrites and lowers the number of multiplications when terms
+  cancel or merge. It finds Strassen's 7 and Laderman's 23 from the standard algorithm.
+- **Open Problems Benchmark v0** (`python -m engine bench`): models write construction programs for covering-design
+  tasks in three tiers, run in the sandbox and scored by the exact checker.
+
+The sandbox is a safety net for local experiments (no network, no private reads, CPU, memory, disk and open-file
+limits), not a hardened isolation boundary; run untrusted code in a VM if that matters to you.
 
 ## Data and credits
 
