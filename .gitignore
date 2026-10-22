@@ -1,0 +1,9 @@
+.venv/
+runs/
+__pycache__/
+.DS_Store
+engine/data/coverdata.json
+claims/
+results/
+engine/native/cover_anneal
+engine/native/lotto_anneal
