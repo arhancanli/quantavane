@@ -49,6 +49,18 @@ class Sandbox(unittest.TestCase):
         r = sandbox.run("def construct():\n    return open('/etc/hosts').read()\n", timeout=20)
         self.assertFalse(r.ok)
 
+    def test_memory_hog_is_stopped(self):
+        r = sandbox.run("def construct():\n    x = bytearray(600 * 2**20)\n    while True: x[0] ^= 1\n", timeout=20,
+                        max_rss_mb=200)
+        self.assertFalse(r.ok); self.assertIn("memory", r.error)
+
+    def test_disk_hog_is_stopped(self):
+        src = ("import os\ndef construct():\n    for i in range(200):\n"
+               "        open(os.path.join(os.environ['TMPDIR'], f'f{i}'), 'wb').write(b'x' * 2**20)\n"
+               "    while True: pass\n")
+        r = sandbox.run(src, timeout=20, max_disk_mb=20)
+        self.assertFalse(r.ok); self.assertIn("folder", r.error)
+
     def test_kills_runaway_programs(self):
         r = sandbox.run("def construct():\n    while True: pass\n", timeout=2)
         self.assertFalse(r.ok); self.assertLess(r.seconds, 10)
