@@ -18,11 +18,13 @@ These coverings each use one block fewer than the best known before them:
 | C(42,12,3) | 76 | 77 |
 | C(47,21,3) | 21 | 22 |
 | C(49,13,3) | 81 | 82 |
+| C(72,23,3) | 51 | 52 |
 
 "Previous best" is the value in the La Jolla Covering Repository's final data (Daniel M. Gordon, CC BY 4.0,
 doi:10.5281/zenodo.19735294). It was still the listed value on coveringrepository.com, which tracks improvements made
-after that repository froze, when checked on 22 October 2026. All ten earlier values came from general constructions
-rather than a direct search. The coverings were submitted to coveringrepository.com on 22 October 2026.
+after that repository froze, when checked on 22 October 2026. Ten of the earlier values came from general
+constructions rather than a direct search; C(72,23,3) = 52 came from Franco Atzeni's local search in 2024. The first
+ten coverings were sent to coveringrepository.com on 22 October 2026, and submission of all eleven is under way.
 
 ## Check them yourself
 

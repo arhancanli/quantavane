@@ -24,8 +24,11 @@ def anneal(v, k, t, m, b, seconds, seed, start=None):
     """(uncovered, moves, blocks) for the best state of one run with b blocks; uncovered 0 means a covering."""
     env = dict(os.environ, CYCLE=str(seconds))
     args = [BINARY, str(v), str(k), str(t), str(m), str(b), str(seconds), str(seed)] + ([start] if start else [])
-    out = subprocess.run(args, capture_output=True, text=True, env=env, timeout=seconds * 3 + 60).stdout.split("\n")
+    run = subprocess.run(args, capture_output=True, text=True, env=env, timeout=seconds * 3 + 60)
+    out = run.stdout.split("\n")
     head = out[0].split()
+    if len(head) < 4:
+        raise RuntimeError(f"lotto_anneal failed: {run.stderr.strip() or 'no output'}")
     blocks = [[int(p) for p in line.split()] for line in out[1:] if line.strip()]
     return int(head[1]), int(head[3]), blocks
 

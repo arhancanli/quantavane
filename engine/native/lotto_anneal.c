@@ -23,14 +23,16 @@
 
 #define MAXV 100
 #define MAXK 32
-#define MAXT 8
-#define MAXM 16
+#define MAXT 16
+#define MAXM 24
 
 typedef unsigned __int128 mask_t;
 
 static int V, K, T, M, B;
 static uint64_t binom[MAXV + 1][MAXM + 1];
 static uint64_t NT, NM;
+
+static uint64_t sat_add(uint64_t a, uint64_t b) { return a + b < a ? UINT64_MAX : a + b; }  /* keeps the size check honest */
 static uint16_t *cntT, *cM;
 static uint8_t *inlist;
 static uint32_t *list;
@@ -225,7 +227,7 @@ int main(int argc, char **argv) {
     double cycle = getenv("CYCLE") ? atof(getenv("CYCLE")) : 10.0;
     double T0 = getenv("T0") ? atof(getenv("T0")) : 2.0, T1 = getenv("T1") ? atof(getenv("T1")) : 0.2;
     for (int n = 0; n <= V; n++) for (int i = 0; i <= MAXM; i++)
-        binom[n][i] = i == 0 ? 1 : n == 0 ? 0 : binom[n - 1][i - 1] + binom[n - 1][i];
+        binom[n][i] = i == 0 ? 1 : n == 0 ? 0 : sat_add(binom[n - 1][i - 1], binom[n - 1][i]);
     NT = binom[V][T]; NM = binom[V][M];
     if (NM >= (1ULL << 31) || NT >= (1ULL << 31)) { fprintf(stderr, "too many subsets\n"); return 2; }
     CT = fill_combos(0, K, T);

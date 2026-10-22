@@ -5,8 +5,9 @@ results count, and every attempt, kept or rejected, is recorded.
 
 ## Results so far
 
-Ten covering designs, each one block below the best value known before, found by this engine on a laptop at no
-cost and submitted to coveringrepository.com on 22 October 2026. The coverings and a standalone checker are in
+Eleven covering designs, each one block below the best value known before, found by this engine on a laptop at no
+cost. The first ten were sent to coveringrepository.com on 22 October 2026, and submission of all eleven is under
+way. The coverings and a standalone checker are in
 [quantavane-covering-records](https://github.com/arhancanli/quantavane-covering-records) and in
 `release/covering-records/`.
 
@@ -22,12 +23,13 @@ cost and submitted to coveringrepository.com on 22 October 2026. The coverings a
 | C(42,12,3) | 76 | 77 |
 | C(47,21,3) | 21 | 22 |
 | C(49,13,3) | 81 | 82 |
+| C(72,23,3) | 51 | 52 |
 
 ## Quick start
 
 ```sh
 uv venv --python 3.12 .venv && uv pip install --python .venv numpy scipy
-.venv/bin/python -m unittest tests/test_engine.py tests/test_lab.py tests/test_native.py
+.venv/bin/python -m unittest tests/test_engine.py tests/test_lab.py tests/test_native.py tests/test_lotto.py
 .venv/bin/python scripts/reproduce_records.py --minutes 10   # find the records again from scratch
 ```
 
