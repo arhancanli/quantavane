@@ -54,6 +54,18 @@ class Sandbox(unittest.TestCase):
                         max_rss_mb=200)
         self.assertFalse(r.ok); self.assertIn("memory", r.error)
 
+    def test_unreadable_folder_counts_as_over_the_disk_limit(self):
+        src = ("import os\ndef construct():\n    d = os.path.join(os.environ['TMPDIR'], 'hidden')\n    os.mkdir(d)\n"
+               "    os.chmod(d, 0)\n    while True: pass\n")
+        r = sandbox.run(src, timeout=20)
+        self.assertFalse(r.ok); self.assertIn("folder", r.error)
+
+    def test_open_files_are_limited(self):
+        src = ("import os\ndef construct():\n    fs = [open(os.path.join(os.environ['TMPDIR'], f'f{i}'), 'w') for i in range(200)]\n"
+               "    return len(fs)\n")
+        r = sandbox.run(src, timeout=20)
+        self.assertFalse(r.ok); self.assertIn("Too many open files", r.error)
+
     def test_disk_hog_is_stopped(self):
         src = ("import os\ndef construct():\n    for i in range(200):\n"
                "        open(os.path.join(os.environ['TMPDIR'], f'f{i}'), 'wb').write(b'x' * 2**20)\n"

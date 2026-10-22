@@ -13,8 +13,9 @@ from dataclasses import dataclass
 
 MARKER = "@@QV-RESULT@@"
 MAX_OUTPUT = 4_000_000
-MAX_RSS_MB = 2048   # macOS ignores RLIMIT_AS, so a watchdog polls the candidate's resident memory instead
+MAX_RSS_MB = 2048   # macOS ignores RLIMIT_AS, so a watchdog polls the candidate's physical footprint instead
 MAX_DISK_MB = 256   # RLIMIT_FSIZE caps each file; this caps the whole temp folder
+MAX_OPEN = 64       # open file descriptors per candidate
 HARNESS = (
     "import json, runpy, sys\n"
     "g = runpy.run_path(sys.argv[1], run_name='candidate')\n"
@@ -51,26 +52,37 @@ def _limits(cpu_seconds):
         os.setsid()
         resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds + 1))
         resource.setrlimit(resource.RLIMIT_FSIZE, (MAX_OUTPUT + 1024, MAX_OUTPUT + 1024))
+        # Few open files: an unlinked file still held open is invisible to the folder check, so this bounds that
+        # hidden space at MAX_OPEN files of at most RLIMIT_FSIZE each.
+        resource.setrlimit(resource.RLIMIT_NOFILE, (MAX_OPEN, MAX_OPEN))
     return apply
 
 
-def _rss_mb(pid):
-    """Resident memory of one process in MB (the sandbox denies forking, so the candidate is a single process)."""
+def _footprint_mb(pid):
+    """Physical footprint of one process in MB from macOS's proc_pid_rusage (counts compressed and swapped memory, unlike
+    RSS); None when it cannot be read. The sandbox denies forking, so the candidate is a single process."""
     try:
-        out = subprocess.run(["ps", "-o", "rss=", "-p", str(pid)], capture_output=True, text=True, timeout=5).stdout
-        return int(out.strip() or 0) / 1024
-    except (OSError, ValueError, subprocess.SubprocessError):
-        return 0.0
+        import ctypes
+        lib = ctypes.CDLL("/usr/lib/libproc.dylib", use_errno=True)
+        buf = ctypes.create_string_buffer(512)  # rusage_info_v2; ri_phys_footprint is the uint64 at offset 72
+        if lib.proc_pid_rusage(int(pid), 2, buf) != 0:
+            return None
+        return int.from_bytes(buf.raw[72:80], "little") / 2 ** 20
+    except (OSError, AttributeError, ValueError):
+        return None
 
 
 def _folder_mb(path, max_entries=5000):
-    """Total size of the files under path in MB; inf when there are suspiciously many entries."""
+    """Total size of the files under path in MB. Fails closed: anything unreadable, or suspiciously many entries,
+    counts as over the limit (a file that vanished mid-walk counts as nothing)."""
     total, seen, stack = 0, 0, [path]
     while stack:
         try:
             entries = list(os.scandir(stack.pop()))
-        except OSError:
+        except FileNotFoundError:
             continue
+        except OSError:
+            return float("inf")
         for e in entries:
             seen += 1
             if seen > max_entries:
@@ -80,8 +92,10 @@ def _folder_mb(path, max_entries=5000):
                     stack.append(e.path)
                 else:
                     total += e.stat(follow_symlinks=False).st_size
-            except OSError:
+            except FileNotFoundError:
                 pass
+            except OSError:
+                return float("inf")
     return total / 2 ** 20
 
 
@@ -120,7 +134,11 @@ def run(source, timeout=60, python=sys.executable, files=None, max_rss_mb=MAX_RS
                     if time.monotonic() > deadline:
                         timed_out = True
                         break
-                    if _rss_mb(proc.pid) > max_rss_mb:
+                    mb = _footprint_mb(proc.pid)
+                    if mb is None and proc.poll() is None:  # cannot measure a live candidate: stop it
+                        over = "memory use could not be measured"
+                        break
+                    if mb is not None and mb > max_rss_mb:
                         over = f"used more than {max_rss_mb} MB of memory"
                         break
                     if _folder_mb(tmp) > max_disk_mb:
