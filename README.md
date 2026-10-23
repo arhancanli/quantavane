@@ -5,8 +5,9 @@ results count, and every attempt, kept or rejected, is recorded.
 
 ## Results so far
 
-Twenty-three covering designs, each one block below the best value known before, found by this engine on a laptop at
-no cost. C(52,11,2) = 29 meets the known lower bound, so it is optimal. C(47,21,3) = 21 was also found independently
+Twenty-seven covering designs, each one block below the best value known before, found by this engine on a laptop at
+no cost. C(52,11,2) = 29 and C(94,14,2) = 54 meet the known lower bounds, so
+both are optimal. C(47,21,3) = 21 was also found independently
 the same day by Hossein Farahani, whose upload is the one coveringrepository.com lists. The first ten were sent to
 coveringrepository.com on 22 October 2026, and uploading all of them is under way. The coverings and a standalone
 checker are in [quantavane-covering-records](https://github.com/arhancanli/quantavane-covering-records) and in
@@ -19,6 +20,7 @@ checker are in [quantavane-covering-records](https://github.com/arhancanli/quant
 | C(65,14,2) | 28 | 29 |
 | C(66,12,2) | 38 | 39 |
 | C(67,15,2) | 26 | 27 |
+| C(69,11,2) | 50 | 51 |
 | C(70,21,2) | 15 | 16 |
 | C(71,16,2) | 26 | 27 |
 | C(75,17,2) | 26 | 27 |
@@ -27,10 +29,13 @@ checker are in [quantavane-covering-records](https://github.com/arhancanli/quant
 | C(84,19,2) | 26 | 27 |
 | C(87,16,2) | 38 | 39 |
 | C(92,16,2) | 42 | 43 |
+| C(94,14,2) | 54 | 55 |
 | C(94,17,2) | 39 | 40 |
 | C(96,22,2) | 25 | 26 |
 | C(98,21,2) | 28 | 29 |
 | C(98,22,2) | 26 | 27 |
+| C(36,10,3) | 80 | 81 |
+| C(41,17,3) | 26 | 27 |
 | C(42,12,3) | 76 | 77 |
 | C(47,21,3) | 21 | 22 |
 | C(49,13,3) | 81 | 82 |
