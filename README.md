@@ -5,7 +5,7 @@ results count, and every attempt, kept or rejected, is recorded.
 
 ## Results so far
 
-Twenty-seven covering designs, each one block below the best value known before, found by this engine on a laptop at
+Twenty-eight covering designs, each one block below the best value known before, found by this engine on a laptop at
 no cost. C(52,11,2) = 29 and C(94,14,2) = 54 meet the known lower bounds, so
 both are optimal. C(47,21,3) = 21 was also found independently
 the same day by Hossein Farahani, whose upload is the one coveringrepository.com lists. The first ten were sent to
