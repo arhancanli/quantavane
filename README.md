@@ -82,6 +82,24 @@ Record values and the record coverings used as starting points come from the La 
 Gordon, CC BY 4.0, doi:10.5281/zenodo.19735294); `scripts/ljcr_targets.py` downloads them. Improvements made after
 that repository froze in March 2026 are listed on coveringrepository.com, so check it before claiming a record.
 
+## How to cite
+
+Cite this repository for the engine. For the coverings it found, cite
+[quantavane-covering-records](https://github.com/arhancanli/quantavane-covering-records) and the Covering Repository
+(coveringrepository.com), which lists them.
+
+```bibtex
+@misc{quantavane,
+  author       = {Canli, Arhan},
+  title        = {Quantavane engine: search and AI models propose constructions, exact checkers decide},
+  year         = {2026},
+  howpublished = {\url{https://github.com/arhancanli/quantavane}},
+  note         = {Quantavane; Apache License 2.0}
+}
+```
+
+[CITATION.cff](CITATION.cff) gives the same reference for GitHub's "Cite this repository" button.
+
 ## Licence
 
 Apache License 2.0 (see `LICENSE`).

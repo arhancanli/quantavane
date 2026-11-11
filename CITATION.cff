@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below. For the coverings it found, cite quantavane-covering-records and the Covering Repository, which lists them."
+type: software
+title: "Quantavane engine: search and AI models propose constructions, exact checkers decide"
+abstract: "Search programs and AI models propose constructions; exact checkers decide whether they are valid; every attempt, kept or rejected, is recorded."
+authors:
+  - family-names: Canli
+    given-names: Arhan
+    affiliation: Quantavane
+    email: arhan@quantavane.com
+license: Apache-2.0
+url: "https://quantavane.com"
+repository-code: "https://github.com/arhancanli/quantavane"
+keywords:
+  - exact verification
+  - covering designs
+  - combinatorial search
